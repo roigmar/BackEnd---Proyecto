@@ -1,0 +1,15 @@
+# --- Dependencias de Node ---
+
+node_modules/
+
+
+# --- Archivos de Sistema y Editores ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Logs y Errores ---
+npm-debug.log*
+yarn-debug.log*
+.env
