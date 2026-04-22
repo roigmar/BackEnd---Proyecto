@@ -1,1 +1,274 @@
-[]
+[
+  {
+    "id": 1,
+    "cliente": "Sucursal Centro",
+    "tipoCliente": "Sucursal",
+    "detalles": [
+      {
+        "productoId": 1,
+        "nombreProducto": "Pan francés",
+        "cantidad": 40,
+        "precioUnitario": 1.2,
+        "subtotal": 48
+      },
+      {
+        "productoId": 2,
+        "nombreProducto": "Medialuna de manteca",
+        "cantidad": 30,
+        "precioUnitario": 0.8,
+        "subtotal": 24
+      }
+    ],
+    "fecha": "2026-04-20T08:00:00.000Z",
+    "total": 72,
+    "estado": "en producción"
+  },
+  {
+    "id": 2,
+    "cliente": "Franquicia Palermo",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 3,
+        "nombreProducto": "Factura con crema",
+        "cantidad": 25,
+        "precioUnitario": 1,
+        "subtotal": 25
+      },
+      {
+        "productoId": 7,
+        "nombreProducto": "Galletas dulces",
+        "cantidad": 15,
+        "precioUnitario": 2.5,
+        "subtotal": 37.5
+      }
+    ],
+    "fecha": "2026-04-20T09:30:00.000Z",
+    "total": 62.5,
+    "estado": "despachado"
+  },
+  {
+    "id": 3,
+    "cliente": "Sucursal Sur",
+    "tipoCliente": "Sucursal",
+    "detalles": [
+      {
+        "productoId": 4,
+        "nombreProducto": "Pan integral",
+        "cantidad": 20,
+        "precioUnitario": 1.5,
+        "subtotal": 30
+      },
+      {
+        "productoId": 8,
+        "nombreProducto": "Pan de campo",
+        "cantidad": 10,
+        "precioUnitario": 2,
+        "subtotal": 20
+      }
+    ],
+    "fecha": "2026-04-20T10:00:00.000Z",
+    "total": 50,
+    "estado": "entregado"
+  },
+  {
+    "id": 4,
+    "cliente": "Franquicia Belgrano",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 5,
+        "nombreProducto": "Budín de vainilla",
+        "cantidad": 12,
+        "precioUnitario": 3.5,
+        "subtotal": 42
+      },
+      {
+        "productoId": 6,
+        "nombreProducto": "Torta de chocolate",
+        "cantidad": 4,
+        "precioUnitario": 12,
+        "subtotal": 48
+      }
+    ],
+    "fecha": "2026-04-21T08:15:00.000Z",
+    "total": 90,
+    "estado": "en producción"
+  },
+  {
+    "id": 5,
+    "cliente": "Sucursal Oeste",
+    "tipoCliente": "Sucursal",
+    "detalles": [
+      {
+        "productoId": 9,
+        "nombreProducto": "Empanada de jamón y queso",
+        "cantidad": 30,
+        "precioUnitario": 2.2,
+        "subtotal": 66
+      },
+      {
+        "productoId": 10,
+        "nombreProducto": "Sandwich de miga",
+        "cantidad": 20,
+        "precioUnitario": 3,
+        "subtotal": 60
+      }
+    ],
+    "fecha": "2026-04-21T09:00:00.000Z",
+    "total": 126,
+    "estado": "despachado"
+  },
+  {
+    "id": 6,
+    "cliente": "Franquicia Recoleta",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 1,
+        "nombreProducto": "Pan francés",
+        "cantidad": 50,
+        "precioUnitario": 1.2,
+        "subtotal": 60
+      },
+      {
+        "productoId": 4,
+        "nombreProducto": "Pan integral",
+        "cantidad": 20,
+        "precioUnitario": 1.5,
+        "subtotal": 30
+      }
+    ],
+    "fecha": "2026-04-21T11:00:00.000Z",
+    "total": 90,
+    "estado": "entregado"
+  },
+  {
+    "id": 7,
+    "cliente": "Sucursal Norte",
+    "tipoCliente": "Sucursal",
+    "detalles": [
+      {
+        "productoId": 2,
+        "nombreProducto": "Medialuna de manteca",
+        "cantidad": 35,
+        "precioUnitario": 0.8,
+        "subtotal": 28
+      },
+      {
+        "productoId": 3,
+        "nombreProducto": "Factura con crema",
+        "cantidad": 20,
+        "precioUnitario": 1,
+        "subtotal": 20
+      }
+    ],
+    "fecha": "2026-04-21T12:30:00.000Z",
+    "total": 48,
+    "estado": "despachado"
+  },
+  {
+    "id": 8,
+    "cliente": "Franquicia Caballito",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 7,
+        "nombreProducto": "Galletas dulces",
+        "cantidad": 18,
+        "precioUnitario": 2.5,
+        "subtotal": 45
+      },
+      {
+        "productoId": 5,
+        "nombreProducto": "Budín de vainilla",
+        "cantidad": 8,
+        "precioUnitario": 3.5,
+        "subtotal": 28
+      }
+    ],
+    "fecha": "2026-04-22T07:45:00.000Z",
+    "total": 73,
+    "estado": "despachado"
+  },
+  {
+    "id": 9,
+    "cliente": "Sucursal Centro",
+    "tipoCliente": "Sucursal",
+    "detalles": [
+      {
+        "productoId": 6,
+        "nombreProducto": "Torta de chocolate",
+        "cantidad": 6,
+        "precioUnitario": 12,
+        "subtotal": 72
+      },
+      {
+        "productoId": 10,
+        "nombreProducto": "Sandwich de miga",
+        "cantidad": 15,
+        "precioUnitario": 3,
+        "subtotal": 45
+      }
+    ],
+    "fecha": "2026-04-22T09:10:00.000Z",
+    "total": 117,
+    "estado": "entregado"
+  },
+  {
+    "id": 10,
+    "cliente": "Franquicia San Telmo",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 8,
+        "nombreProducto": "Pan de campo",
+        "cantidad": 20,
+        "precioUnitario": 2,
+        "subtotal": 40
+      },
+      {
+        "productoId": 9,
+        "nombreProducto": "Empanada de jamón y queso",
+        "cantidad": 25,
+        "precioUnitario": 2.2,
+        "subtotal": 55
+      }
+    ],
+    "fecha": "2026-04-22T10:20:00.000Z",
+    "total": 95,
+    "estado": "en producción"
+  },
+  
+  {
+    "id": 11,
+    "cliente": "Franquicia Palermo",
+    "tipoCliente": "Franquicia",
+    "detalles": [
+      {
+        "productoId": 3,
+        "nombreProducto": "Factura con crema",
+        "cantidad": 25,
+        "precioUnitario": 1,
+        "subtotal": 25
+      },
+      {
+        "productoId": 7,
+        "nombreProducto": "Galletas dulces",
+        "cantidad": 10,
+        "precioUnitario": 2.5,
+        "subtotal": 25
+      },
+      {
+        "productoId": 10,
+        "nombreProducto": "Sandwich de miga",
+        "cantidad": 12,
+        "precioUnitario": 3,
+        "subtotal": 36
+      }
+    ],
+    "fecha": "2026-04-22T19:03:58.861Z",
+    "total": 86,
+    "estado": "pendiente"
+  }
+]

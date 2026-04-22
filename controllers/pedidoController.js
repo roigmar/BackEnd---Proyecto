@@ -8,8 +8,13 @@ const productosPath = path.join(__dirname, '../data/productos.json');
 
 /* CREATE */
 function crearPedido(req, res) {
+    
     try {
         const { cliente, tipoCliente, detalles } = req.body;
+        // 👇 DEBUG ACÁ
+        console.log("BODY:", req.body);
+        console.log("DETALLES:", detalles);
+        console.log("ES ARRAY?:", Array.isArray(detalles));
 
         // tipoCliente debe ser "Sucursal" o "Franquicia"
         if (!cliente || !tipoCliente || !detalles) {
@@ -54,14 +59,14 @@ function crearPedido(req, res) {
             );
 
             detallesProcesados.push(nuevoDetalle);
-        }
+        }                                
 
         const nuevoId = pedidos.length > 0
             ? Math.max(...pedidos.map(p => p.id)) + 1
             : 1;
 
-        const nuevoPedido = new Pedido(nuevoId, cliente, detallesProcesados);
-        nuevoPedido.tipoCliente = tipoCliente;
+        const nuevoPedido = new Pedido(nuevoId, cliente, tipoCliente, detallesProcesados);
+        
 
         pedidos.push(nuevoPedido);
 
