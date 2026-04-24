@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h2 Catálogo de Productos
+  if productos.length === 0
+    p No hay productos cargados.
+  else
+    table
+      thead
+        tr
+          th ID
+          th Nombre
+          th Precio
+          th Descripción
+          th Stock
+      tbody
+        each producto in productos
+          tr
+            td= producto.id
+            td= producto.nombre
+            td $#{producto.precio}
+            td= producto.descripcion
+            td= producto.stock

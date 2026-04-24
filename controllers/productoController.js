@@ -149,10 +149,71 @@ function eliminarProducto(req, res) {
     }
 }
 
+// --- FUNCIONES PARA VISTAS ---
+
+const obtenerProductosVista = (req, res) => {
+    try {
+        const productos = JSON.parse(fs.readFileSync(productosPath, 'utf-8'));
+        res.render('catalogo', { productos });
+    } catch (error) {
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+const formularioNuevoProducto = (req, res) => {
+    res.render('nuevo');
+};
+
+const crearProductoVista = (req, res) => {
+    try {
+        let { nombre, precio, descripcion, stock } = req.body;
+        
+        // Convertir precio y stock a números, ya que del formulario llegan como strings
+        precio = parseFloat(precio);
+        stock = parseInt(stock, 10);
+
+        if (!nombre || isNaN(precio) || !descripcion || isNaN(stock)) {
+            return res.status(400).send('Faltan campos obligatorios o son inválidos');
+        }
+
+        if (precio < 0 || stock < 0) {
+            return res.status(400).send('Datos inválidos');
+        }
+
+        const productos = JSON.parse(fs.readFileSync(productosPath, 'utf-8'));
+
+        const existe = productos.some(
+            p => p.nombre.toLowerCase().trim() === nombre.toLowerCase().trim()
+        );
+
+        if (existe) {
+            return res.status(400).send('El nombre del producto ya existe');
+        }
+
+        const nuevoId = productos.length > 0
+            ? Math.max(...productos.map(p => p.id)) + 1
+            : 1;
+
+        const nuevoProducto = new Producto(nuevoId, nombre, precio, descripcion, stock);
+
+        productos.push(nuevoProducto);
+
+        fs.writeFileSync(productosPath, JSON.stringify(productos, null, 2));
+
+        res.redirect('/productos/vista');
+
+    } catch (error) {
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
 module.exports = {
     crearProducto,
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
-    eliminarProducto
+    eliminarProducto,
+    obtenerProductosVista,
+    formularioNuevoProducto,
+    crearProductoVista
 };

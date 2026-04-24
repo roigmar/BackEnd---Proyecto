@@ -68,5 +68,12 @@
     "precio": 3,
     "descripcion": "Sandwich clásico de jamón y queso",
     "stock": 50
+  },
+  {
+    "id": 11,
+    "nombre": "Budin de chocolate",
+    "precio": 4,
+    "descripcion": "Budin de chocolate",
+    "stock": 10
   }
 ]

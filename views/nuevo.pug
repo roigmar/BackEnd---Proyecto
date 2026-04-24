@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h2 Agregar Nuevo Producto
+  form(action="/productos/vista" method="POST")
+    div
+      label(for="nombre") Nombre:
+      input(type="text" name="nombre" id="nombre" required)
+    div
+      label(for="precio") Precio:
+      input(type="number" name="precio" id="precio" step="0.01" required)
+    div
+      label(for="descripcion") Descripción:
+      textarea(name="descripcion" id="descripcion" required)
+    div
+      label(for="stock") Stock:
+      input(type="number" name="stock" id="stock" required)
+    div
+      button(type="submit") Guardar Producto

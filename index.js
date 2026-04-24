@@ -10,7 +10,7 @@ const pedidosRoutes = require("./routes/pedidoRoutes");
 
 
 app.use(express.json());
-//middleware que puedr leer los datos enviados desde formularios HTML (method="POST").
+//middleware que puede leer los datos enviados desde formularios HTML (method="POST").
 app.use(express.urlencoded({ extended: true }));
 
 // Configura el motor de vistas Pug
