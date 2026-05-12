@@ -1,29 +1,45 @@
 require("dotenv").config();
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
+// Conexión a MongoDB
+mongoose.connect(MONGO_URI)
+    .then(() => console.log("Conectado a MongoDB con éxito"))
+    .catch((err) => console.error("Error al conectar a MongoDB:", err));
 
 const productoRoutes = require("./routes/productoRoutes");
 const pedidosRoutes = require("./routes/pedidoRoutes");
 
-
 app.use(express.json());
-//middleware que puede leer los datos enviados desde formularios HTML (method="POST").
 app.use(express.urlencoded({ extended: true }));
 
 // Configura el motor de vistas Pug
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-//permite servir archivos estáticos desde la carpeta public
+// Permite servir archivos estáticos desde la carpeta public
 app.use(express.static("public"));
 
-// rutas
+// Rutas
 app.use("/productos", productoRoutes);
 app.use("/pedidos", pedidosRoutes);
 
+// Middleware global de manejo de errores
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    const status = err.status || 500;
+    res.status(status).json({
+        error: {
+            message: err.message || "Error interno del servidor",
+            status: status
+        }
+    });
+});
+
 app.listen(PORT, () => {
-    console.log("Servidor corriendo en puerto " + PORT);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
