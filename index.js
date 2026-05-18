@@ -13,6 +13,7 @@ mongoose.connect(MONGO_URI)
 
 const productoRoutes = require("./routes/productoRoutes");
 const pedidosRoutes = require("./routes/pedidoRoutes");
+const clienteRoutes = require("./routes/clienteRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.use(express.static("public"));
 // Rutas
 app.use("/productos", productoRoutes);
 app.use("/pedidos", pedidosRoutes);
+app.use("/clientes", clienteRoutes);
 
 // Middleware global de manejo de errores
 app.use((err, req, res, next) => {
