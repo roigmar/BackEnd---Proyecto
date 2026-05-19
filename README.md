@@ -6,17 +6,17 @@ Este proyecto es el backend para el sistema de gestión de la panificadora "La E
 
 1. Clonar el repositorio.
 2. Instalar las dependencias:
-   ```bash
+```bash
    npm install
-   ```
-3. Iniciar el servidor:
-   ```bash
-   node index.js
-   ```
-   *(Opcional) Si deseas iniciarlo en modo desarrollo con reinicio automático:*
-   ```bash
-   npx nodemon index.js
-   ```
+```
+3. Crear el archivo `.env` en la raíz del proyecto con las variables de entorno necesarias.
+   Los valores se encuentran en el siguiente documento compartido:
+   [Variables de entorno - Google Drive](https://docs.google.com/document/d/1mzmFGqIf4aiWuOfrQrRwfW1ny33kAwyjvdxD9SOe7Tk/edit?usp=sharing)
+
+4. Iniciar el servidor:
+```bash
+   npm run dev
+```
    *El servidor se iniciará en el puerto especificado en el archivo `.env` o en el 3000 por defecto.*
 
 ## Documentación de Controladores
