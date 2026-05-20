@@ -1,0 +1,77 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/admin") ← Volver al panel
+  span.nav-badge Administrador
+  a(href="/admin/logout" style="color:var(--text-muted); font-size:0.85rem;") Cerrar sesión
+
+block content
+  .card(style="max-width: 1000px; width: 100%;")
+    h2.section-title Pedidos
+    p.section-sub(style="margin-bottom: 1.5rem;") Pedidos cargados por sucursales y franquicias.
+
+    //- ── Filtro por estado ──
+    form(method="GET" action="/admin/pedidos" style="display:flex; gap:0.75rem; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap;")
+      span(style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;") Filtrar por estado:
+      select(name="estado" onchange="this.form.submit()" style="background:var(--bg-input); border:1px solid var(--border); color:var(--text-main); border-radius:6px; padding:0.45rem 0.75rem; font-size:0.9rem;")
+        option(value="" selected=(estadoFiltro === '')) Todos
+        option(value="pendiente"      selected=(estadoFiltro === 'pendiente'))      Pendiente
+        option(value="en producción"  selected=(estadoFiltro === 'en producción'))  En producción
+        option(value="despachado"     selected=(estadoFiltro === 'despachado'))     Despachado
+        option(value="entregado"      selected=(estadoFiltro === 'entregado'))      Entregado
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    if !pedidos || pedidos.length === 0
+      p(style="color:var(--text-muted); text-align:center; padding:2.5rem;") No hay pedidos para mostrar.
+    else
+      //- ── Tabla de pedidos ──
+      table.portal-table
+        thead
+          tr
+            th Fecha
+            th Cliente
+            th Tipo
+            th Productos
+            th Total
+            th Estado
+        tbody
+          each pedido in pedidos
+            tr
+              td= new Date(pedido.fecha).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
+              td= pedido.clienteId ? pedido.clienteId.nombre : '—'
+              td
+                if pedido.clienteId && pedido.clienteId.tipo === 'FRANQUICIA'
+                  span.estado-badge.tipo-franquicia Franquicia
+                else
+                  span.estado-badge.tipo-sucursal Sucursal
+              td
+                //- Lista compacta de productos del pedido
+                ul(style="margin:0; padding-left:1rem; font-size:0.82rem; color:var(--text-muted);")
+                  each detalle in pedido.detalles
+                    li
+                      | #{detalle.productoId ? detalle.productoId.nombre : 'Producto eliminado'}
+                      span(style="color:var(--gold-dark);")  ×#{detalle.cantidad}
+              td $#{pedido.total.toLocaleString('es-AR')}
+              td
+                span(class="estado-badge estado-" + pedido.estado.replace(' ', '-'))= pedido.estado
+
+  style.
+    .estado-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      letter-spacing: 0.04em;
+    }
+    .estado-pendiente      { background: rgba(245,200,66,0.15);  color: #f5c842; border: 1px solid rgba(245,200,66,0.3);  }
+    .estado-en-producción  { background: rgba(100,160,255,0.15); color: #7eb3ff; border: 1px solid rgba(100,160,255,0.3); }
+    .estado-despachado     { background: rgba(180,120,255,0.15); color: #c99dff; border: 1px solid rgba(180,120,255,0.3); }
+    .estado-entregado      { background: rgba(76,175,125,0.15);  color: #4caf7d; border: 1px solid rgba(76,175,125,0.3);  }
+    .tipo-franquicia       { background: rgba(212,160,23,0.12);  color: #d4a017; border: 1px solid rgba(212,160,23,0.25); }
+    .tipo-sucursal         { background: rgba(80,180,220,0.12);  color: #50b4dc; border: 1px solid rgba(80,180,220,0.25); }

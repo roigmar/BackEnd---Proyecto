@@ -1,0 +1,117 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/portal") ← Volver al portal
+  span.nav-badge #{sesion.nombre}
+  a(href="/portal/logout") Cerrar sesión
+
+block content
+  .card(style="max-width: 680px; width: 100%")
+    h2.section-title Cargar Nuevo Pedido
+    p.section-sub Completá los datos del pedido. El total se calcula automáticamente.
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    form#form-pedido(action="/pedidos" method="POST")
+      //- clienteId viene de la sesión del usuario logueado
+      input(type="hidden" name="clienteId" value=sesion.clienteId)
+
+      .form-group
+        label Fecha del pedido
+        input(
+          type="date"
+          name="fecha"
+          value=fechaHoy
+          readonly
+          style="cursor: not-allowed; opacity: 0.6;"
+        )
+
+      hr.divider
+
+      .detalles-header
+        span Productos del pedido
+        button.btn.btn-secondary(type="button" onclick="agregarDetalle()")
+          span ＋ Agregar producto
+
+      #contenedor-detalles
+
+      hr.divider
+
+      .total-box
+        span.total-label Total estimado
+        span.total-value#total-display $0.00
+
+      input(type="hidden" name="total" id="campo-total" value="0")
+
+      .form-group
+        label Observaciones (opcional)
+        textarea(name="observaciones" placeholder="Aclaraciones sobre el pedido, horarios especiales, etc.")
+
+      button.btn.btn-primary(type="submit")
+        span Confirmar pedido
+
+  script.
+    const productos = !{JSON.stringify(productos)};
+    let filaIndex = 0;
+
+    function agregarDetalle() {
+      const contenedor = document.getElementById('contenedor-detalles');
+      const idx = filaIndex++;
+
+      const opciones = productos.map(p =>
+        `<option value="${p._id}" data-precio="${p.precio}">${p.nombre} — $${p.precio.toLocaleString('es-AR')}</option>`
+      ).join('');
+
+      const fila = document.createElement('div');
+      fila.className = 'detalle-row';
+      fila.id = `fila-${idx}`;
+      fila.innerHTML = `
+        <div class="form-group">
+          <label>Producto</label>
+          <select name="detalles[${idx}][productoId]" onchange="recalcular()" required>
+            <option value="" disabled selected>Seleccioná un producto</option>
+            ${opciones}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cantidad</label>
+          <input
+            type="number"
+            name="detalles[${idx}][cantidad]"
+            min="1"
+            value="1"
+            onchange="recalcular()"
+            required
+          />
+        </div>
+        <button type="button" class="btn btn-danger" onclick="eliminarFila('fila-${idx}')">✕</button>
+      `;
+      contenedor.appendChild(fila);
+      recalcular();
+    }
+
+    function eliminarFila(id) {
+      document.getElementById(id)?.remove();
+      recalcular();
+    }
+
+    function recalcular() {
+      let total = 0;
+      document.querySelectorAll('.detalle-row').forEach(fila => {
+        const select = fila.querySelector('select');
+        const cantInput = fila.querySelector('input[type="number"]');
+        if (!select || !cantInput) return;
+        const opt = select.selectedOptions[0];
+        const precio = parseFloat(opt?.dataset?.precio || 0);
+        const cant = parseInt(cantInput.value || 0);
+        total += precio * cant;
+      });
+      document.getElementById('total-display').textContent =
+        '$' + total.toLocaleString('es-AR', { minimumFractionDigits: 2 });
+      document.getElementById('campo-total').value = total.toFixed(2);
+    }
+
+    document.addEventListener('DOMContentLoaded', agregarDetalle);

@@ -1,0 +1,24 @@
+extends layout-portal
+
+block nav-extra  
+  span.nav-badge #{sesion.nombre}
+  a(href="/portal/logout") Cerrar sesión
+
+block content
+  .portal-home-header(style="text-align:center; margin-bottom: 2.5rem;")
+    h2.section-title(style="font-size:1.8rem;") Bienvenido/a
+    p.section-sub
+      | Elegí una de las opciones para continuar
+
+  .portal-grid
+    a.portal-action-card(href="/portal/nuevo-pedido")
+      span.card-icon 📦
+      span.card-title Cargar pedido
+      span.card-desc Registrá un nuevo pedido
+
+    a.portal-action-card(href="/portal/mis-pedidos")
+      span.card-icon 📋
+      span.card-title Mis pedidos
+      span.card-desc Consultá el estado de tus pedidos
+
+

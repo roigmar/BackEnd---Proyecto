@@ -1,19 +1,59 @@
-extends layout
+extends layout-portal
+
+block nav-extra
+  a(href="/admin/productos") ← Volver al catálogo
+  span.nav-badge Administrador
+  a(href="/admin/logout" style="color:var(--text-muted); font-size:0.85rem;") Cerrar sesión
 
 block content
-  h2 Agregar Nuevo Producto
-  form(action="/productos/vista" method="POST")
-    div
-      label(for="nombre") Nombre:
-      input(type="text" name="nombre" id="nombre" required)
-    div
-      label(for="precio") Precio:
-      input(type="number" name="precio" id="precio" step="0.01" required)
-    div
-      label(for="descripcion") Descripción:
-      textarea(name="descripcion" id="descripcion" required)
-    div
-      label(for="stock") Stock:
-      input(type="number" name="stock" id="stock" required)
-    div
-      button(type="submit") Guardar Producto
+  .card(style="max-width: 520px; width: 100%;")
+    h2.section-title Nuevo Producto
+    p.section-sub Completá los datos para agregar un producto al catálogo.
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    form(action="/admin/productos/nuevo" method="POST")
+      .form-group
+        label(for="nombre") Nombre
+        input#nombre(
+          type="text"
+          name="nombre"
+          placeholder="Ej: Pan de molde"
+          required
+        )
+
+      .form-group
+        label(for="precio") Precio ($)
+        input#precio(
+          type="number"
+          name="precio"
+          min="0"
+          step="1"
+          placeholder="Ej: 1500"
+          required
+        )
+
+      .form-group
+        label(for="descripcion") Descripción
+        textarea#descripcion(
+          name="descripcion"
+          placeholder="Breve descripción del producto"
+          required
+        )
+
+      .form-group
+        label(for="stock") Stock inicial
+        input#stock(
+          type="number"
+          name="stock"
+          min="0"
+          step="1"
+          placeholder="Ej: 50"
+          required
+        )
+
+      button.btn.btn-primary(type="submit")
+        span Guardar producto

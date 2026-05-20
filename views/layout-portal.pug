@@ -1,0 +1,25 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Portal de Pedidos — La Espiga de Oro
+    meta(name="description", content="Portal de pedidos para sucursales y franquicias de La Espiga de Oro S.R.L.")
+    link(rel="stylesheet", href="/style.css")
+
+  body
+    .portal-wrapper
+      header.portal-header
+        a.portal-brand(href="/portal")
+          span.brand-icon 🌾
+          span
+            span.brand-name La Espiga de Oro
+
+        nav.portal-nav
+          block nav-extra
+
+      main.portal-main
+        block content
+
+      footer.portal-footer
+        p La Espiga de Oro S.R.L. &mdash; Sistema de gestión de pedidos

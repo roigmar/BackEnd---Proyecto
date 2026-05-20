@@ -1,0 +1,26 @@
+extends layout-portal
+
+block nav-extra
+  span.nav-badge Administrador
+  a(href="/admin/logout") Cerrar sesión
+
+block content
+  .portal-home-header(style="text-align:center; margin-bottom: 2.5rem;")
+    h2.section-title(style="font-size:1.8rem;") Panel de Gestión
+    p.section-sub Portal de administración — La Espiga de Oro S.R.L.
+
+  .portal-grid
+    a.portal-action-card(href="/admin/pedidos")
+      span.card-icon 📋
+      span.card-title Pedidos
+      span.card-desc Visualizá todos los pedidos de sucursales y franquicias
+
+    a.portal-action-card(href="/admin/productos")
+      span.card-icon 📦
+      span.card-title Catálogo de productos
+      span.card-desc Consultá y administrá el catálogo completo
+
+    a.portal-action-card(href="/admin/productos/nuevo")
+      span.card-icon ➕
+      span.card-title Nuevo producto
+      span.card-desc Agregá un nuevo producto al catálogo

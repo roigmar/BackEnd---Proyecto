@@ -1,0 +1,37 @@
+extends layout-portal
+
+block content
+  .card.login-card
+    .login-logo
+      span.logo-emoji 🌾
+      h1 Portal de Pedidos
+      p Ingresá con tus credenciales de acceso
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    form(action="/portal/login" method="POST")
+      .form-group
+        label(for="usuario") Usuario
+        input#usuario(
+          type="text"
+          name="usuario"
+          placeholder="Ej: sucursal.centro"
+          required
+          autocomplete="username"
+        )
+
+      .form-group
+        label(for="password") Contraseña
+        input#password(
+          type="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        )
+
+      button.btn.btn-primary(type="submit")
+        span Ingresar
