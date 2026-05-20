@@ -1,73 +1,456 @@
+/* =====================================================
+   La Espiga de Oro — Portal de Franquicias
+   Estilos exclusivos del portal
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+/* ── Variables ── */
+:root {
+  --gold-light:  #f5c842;
+  --gold-main:   #d4a017;
+  --gold-dark:   #a37810;
+  --bg-dark:     #0f0e0b;
+  --bg-card:     #1a1810;
+  --bg-input:    #231f14;
+  --border:      #3a3420;
+  --text-main:   #f0e8d0;
+  --text-muted:  #8a7d5c;
+  --danger:      #e05252;
+  --success:     #4caf7d;
+  --radius:      10px;
+  --shadow:      0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ── Reset base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f4f4f9;
-    color: #333;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.6;
 }
 
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+/* ── Fondo con textura sutil ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212,160,23,0.12) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+/* ── Wrapper general ── */
+.portal-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-nav a:hover {
-    text-decoration: underline;
+/* ── Header / navbar ── */
+.portal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(15,14,11,0.85);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
 }
 
-table, th, td {
-    border: 1px solid #ccc;
+.portal-brand .brand-icon {
+  font-size: 1.8rem;
+  line-height: 1;
 }
 
-th, td {
-    padding: 10px;
-    text-align: left;
+.portal-brand .brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
 }
 
-th {
-    background-color: #f2f2f2;
+.portal-brand .brand-sub {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: block;
+  margin-top: -2px;
 }
 
-form div {
-    margin-bottom: 15px;
+.portal-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+.portal-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
-input[type="text"], input[type="number"], textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+.portal-nav a:hover { color: var(--gold-light); }
+
+.nav-badge {
+  background: var(--gold-main);
+  color: var(--bg-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-button {
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* ── Contenido principal ── */
+.portal-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
 }
 
-button:hover {
-    background-color: #218838;
+/* ── Card general ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem;
+  width: 100%;
+}
+
+/* ── LOGIN específico ── */
+.login-card {
+  max-width: 420px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-logo .logo-emoji {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.login-logo h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--gold-light);
+  margin-bottom: 0.25rem;
+}
+
+.login-logo p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ── Formularios ── */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.7rem 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold-main);
+  box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+}
+
+.form-group select option { background: var(--bg-input); }
+
+.form-group textarea { resize: vertical; min-height: 90px; }
+
+/* ── Botones ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 7px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-main), var(--gold-light));
+  color: var(--bg-dark);
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-main));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(212,160,23,0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold-dark);
+  color: var(--gold-light);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.btn-danger:hover { background: var(--danger); color: #fff; }
+
+.btn-block { width: 100%; }
+
+/* ── Alerta de error ── */
+.alert {
+  padding: 0.8rem 1rem;
+  border-radius: 7px;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alert-error {
+  background: rgba(224,82,82,0.12);
+  border: 1px solid rgba(224,82,82,0.35);
+  color: #f08080;
+}
+
+.alert-success {
+  background: rgba(76,175,125,0.12);
+  border: 1px solid rgba(76,175,125,0.35);
+  color: #80d4a8;
+}
+
+/* ── Sección de pedido ── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--gold-light);
+  margin-bottom: 0.25rem;
+}
+
+.section-sub {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 2rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* ── Tabla de detalles de pedido ── */
+.detalles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.detalles-header span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.detalle-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 0.75rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.75rem;
+}
+
+.detalle-row .form-group { margin-bottom: 0; }
+
+/* ── Total ── */
+.total-box {
+  background: rgba(212,160,23,0.08);
+  border: 1px solid rgba(212,160,23,0.2);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.total-box .total-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.total-box .total-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--gold-light);
+  font-weight: 700;
+}
+
+/* ── Portal home cards ── */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.portal-action-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-main);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.portal-action-card:hover {
+  border-color: var(--gold-dark);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(212,160,23,0.12);
+}
+
+.portal-action-card .card-icon { font-size: 2.5rem; }
+
+.portal-action-card .card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--gold-light);
+}
+
+.portal-action-card .card-desc {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+/* ── Footer ── */
+.portal-footer {
+  text-align: center;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Tabla admin (catálogo de productos) ── */
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.portal-table th {
+  background: rgba(212,160,23,0.08);
+  color: var(--gold-light);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border);
+}
+
+.portal-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.portal-table tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.portal-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .portal-header { padding: 1rem; }
+  .card { padding: 1.75rem 1.25rem; }
+  .detalle-row { grid-template-columns: 1fr; }
 }
