@@ -1,0 +1,146 @@
+[
+  {
+    "nombre": "Sucursal Centro",
+    "tipo": "SUCURSAL",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Corrientes 1500, CABA",
+      "zona_reparto": "Centro",
+      "dias_entrega": ["Lunes", "Miércoles", "Viernes"],
+      "horario_limite_pedido": "18:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 0,
+      "cuit_facturacion": "30-11111111-1",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Sucursal Sur",
+    "tipo": "SUCURSAL",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Rivadavia 8200, CABA",
+      "zona_reparto": "Sur",
+      "dias_entrega": ["Martes", "Jueves", "Sábado"],
+      "horario_limite_pedido": "17:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 0,
+      "cuit_facturacion": "30-22222222-2",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Sucursal Oeste",
+    "tipo": "SUCURSAL",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. General Paz 3400, CABA",
+      "zona_reparto": "Oeste",
+      "dias_entrega": ["Lunes", "Miércoles", "Viernes"],
+      "horario_limite_pedido": "17:30"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 0,
+      "cuit_facturacion": "30-33333333-3",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Sucursal Norte",
+    "tipo": "SUCURSAL",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Cabildo 2100, CABA",
+      "zona_reparto": "Norte",
+      "dias_entrega": ["Martes", "Jueves", "Sábado"],
+      "horario_limite_pedido": "18:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 0,
+      "cuit_facturacion": "30-44444444-4",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Franquicia Palermo",
+    "tipo": "FRANQUICIA",
+    "configuracion_logistica": {
+      "direccion_entrega": "Thames 1800, Palermo, CABA",
+      "zona_reparto": "Palermo",
+      "dias_entrega": ["Lunes", "Miércoles", "Viernes"],
+      "horario_limite_pedido": "16:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 8,
+      "cuit_facturacion": "20-55555555-5",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Franquicia Belgrano",
+    "tipo": "FRANQUICIA",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Cabildo 900, Belgrano, CABA",
+      "zona_reparto": "Belgrano",
+      "dias_entrega": ["Martes", "Jueves", "Sábado"],
+      "horario_limite_pedido": "16:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 8,
+      "cuit_facturacion": "20-66666666-6",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Franquicia Recoleta",
+    "tipo": "FRANQUICIA",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Santa Fe 1600, Recoleta, CABA",
+      "zona_reparto": "Recoleta",
+      "dias_entrega": ["Lunes", "Miércoles", "Viernes"],
+      "horario_limite_pedido": "15:30"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 10,
+      "cuit_facturacion": "20-77777777-7",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Franquicia Caballito",
+    "tipo": "FRANQUICIA",
+    "configuracion_logistica": {
+      "direccion_entrega": "Av. Rivadavia 5100, Caballito, CABA",
+      "zona_reparto": "Caballito",
+      "dias_entrega": ["Martes", "Jueves"],
+      "horario_limite_pedido": "16:30"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 8,
+      "cuit_facturacion": "20-88888888-8",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  },
+  {
+    "nombre": "Franquicia San Telmo",
+    "tipo": "FRANQUICIA",
+    "configuracion_logistica": {
+      "direccion_entrega": "Defensa 700, San Telmo, CABA",
+      "zona_reparto": "San Telmo",
+      "dias_entrega": ["Lunes", "Miércoles", "Viernes"],
+      "horario_limite_pedido": "16:00"
+    },
+    "finanzas": {
+      "porcentaje_royalty": 9,
+      "cuit_facturacion": "20-99999999-9",
+      "estado_cuenta": 0
+    },
+    "activo": true
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "usuario": "admin",
+    "passwordPlain": "admin123",
+    "rol": "ADMIN"
+  },
+  {
+    "usuario": "sucursal.centro",
+    "passwordPlain": "centro123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Sucursal Centro"
+  },
+  {
+    "usuario": "sucursal.sur",
+    "passwordPlain": "sur123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Sucursal Sur"
+  },
+  {
+    "usuario": "sucursal.oeste",
+    "passwordPlain": "oeste123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Sucursal Oeste"
+  },
+  {
+    "usuario": "sucursal.norte",
+    "passwordPlain": "norte123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Sucursal Norte"
+  },
+  {
+    "usuario": "franquicia.palermo",
+    "passwordPlain": "palermo123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Franquicia Palermo"
+  },
+  {
+    "usuario": "franquicia.belgrano",
+    "passwordPlain": "belgrano123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Franquicia Belgrano"
+  },
+  {
+    "usuario": "franquicia.recoleta",
+    "passwordPlain": "recoleta123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Franquicia Recoleta"
+  },
+  {
+    "usuario": "franquicia.caballito",
+    "passwordPlain": "caballito123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Franquicia Caballito"
+  },
+  {
+    "usuario": "franquicia.santelmo",
+    "passwordPlain": "santelmo123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Franquicia San Telmo"
+  }
+]
