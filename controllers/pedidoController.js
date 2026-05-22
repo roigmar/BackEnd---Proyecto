@@ -1,78 +1,84 @@
-const fs = require('fs');
-const path = require('path');
 const Pedido = require('../models/pedido');
-const DetallePedido = require('../models/detallePedido');
-
-const pedidosPath = path.join(__dirname, '../data/pedidos.json');
-const productosPath = path.join(__dirname, '../data/productos.json');
+const Cliente = require('../models/cliente');
+const Producto = require('../models/producto');
 
 /* CREATE */
-function crearPedido(req, res) {
-    
+async function crearPedido(req, res) {
     try {
-        const { cliente, tipoCliente, detalles } = req.body;
-        // 👇 DEBUG ACÁ
-        console.log("BODY:", req.body);
-        console.log("DETALLES:", detalles);
-        console.log("ES ARRAY?:", Array.isArray(detalles));
+        const { clienteId, detalles } = req.body;
 
-        // tipoCliente debe ser "Sucursal" o "Franquicia"
-        if (!cliente || !tipoCliente || !detalles) {
+        if (!clienteId || !detalles) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
-        }
-
-        if (tipoCliente !== 'Sucursal' && tipoCliente !== 'Franquicia') {
-            return res.status(400).json({ error: 'tipoCliente debe ser "Sucursal" o "Franquicia"' });
         }
 
         if (!Array.isArray(detalles) || detalles.length === 0) {
             return res.status(400).json({ error: 'El pedido debe incluir al menos un detalle' });
         }
 
-        const productos = JSON.parse(fs.readFileSync(productosPath, 'utf-8'));
-        const pedidos = JSON.parse(fs.readFileSync(pedidosPath, 'utf-8'));
+        const cliente = await Cliente.findById(clienteId);
+
+        if (!cliente) {
+            return res.status(404).json({ error: 'Cliente no encontrado' });
+        }
+
+        if (!cliente.activo) {
+            return res.status(400).json({ error: 'El cliente está inactivo' });
+        }
 
         const detallesProcesados = [];
+        let total = 0;
 
         for (const detalle of detalles) {
             const { productoId, cantidad } = detalle;
 
-            if (productoId === undefined || cantidad === undefined) {
+            if (!productoId || cantidad === undefined) {
                 return res.status(400).json({ error: 'Cada detalle debe incluir productoId y cantidad' });
             }
 
-            if (typeof cantidad !== 'number' || cantidad <= 0) {
+            const cantidadNumero = Number(cantidad);
+
+            if (isNaN(cantidadNumero) || cantidadNumero <= 0) {
                 return res.status(400).json({ error: 'La cantidad debe ser un número mayor a 0' });
             }
 
-            const producto = productos.find(p => p.id === Number(productoId));
+            const producto = await Producto.findById(productoId);
 
             if (!producto) {
                 return res.status(404).json({ error: `Producto con id ${productoId} no encontrado` });
             }
 
-            const nuevoDetalle = new DetallePedido(
-                producto.id,
-                producto.nombre,
-                cantidad,
-                producto.precio
-            );
+            if (producto.stock < cantidadNumero) {
+                return res.status(400).json({
+                    error: `Stock insuficiente para el producto "${producto.nombre}"`
+                });
+            }
 
-            detallesProcesados.push(nuevoDetalle);
-        }                                
+            const subtotal = producto.precio * cantidadNumero;
 
-        const nuevoId = pedidos.length > 0
-            ? Math.max(...pedidos.map(p => p.id)) + 1
-            : 1;
+            detallesProcesados.push({
+                productoId: producto._id,
+                cantidad: cantidadNumero,
+                precioUnitario: producto.precio,
+                subtotal
+            });
 
-        const nuevoPedido = new Pedido(nuevoId, cliente, tipoCliente, detallesProcesados);
-        
+            total += subtotal;
+        }
 
-        pedidos.push(nuevoPedido);
+        const nuevoPedido = new Pedido({
+            clienteId: cliente._id,
+            detalles: detallesProcesados,
+            total,
+            estado: 'pendiente'
+        });
 
-        fs.writeFileSync(pedidosPath, JSON.stringify(pedidos, null, 2));
+        await nuevoPedido.save();
 
-        res.status(201).json(nuevoPedido);
+        const pedidoCreado = await Pedido.findById(nuevoPedido._id)
+            .populate('clienteId', 'nombre tipo')
+            .populate('detalles.productoId', 'nombre');
+
+        res.status(201).json(pedidoCreado);
 
     } catch (error) {
         res.status(500).json({ error: 'Error interno del servidor' });
@@ -80,20 +86,24 @@ function crearPedido(req, res) {
 }
 
 /* READ */
-function obtenerPedidos(req, res) {
+async function obtenerPedidos(req, res) {
     try {
-        const pedidos = JSON.parse(fs.readFileSync(pedidosPath, 'utf-8'));
+        const pedidos = await Pedido.find()
+            .populate('clienteId', 'nombre tipo configuracion_logistica.zona_reparto')
+            .populate('detalles.productoId', 'nombre precio')
+            .sort({ fecha: -1 });
+
         res.json(pedidos);
     } catch (error) {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
 
-function obtenerPedidoPorId(req, res) {
+async function obtenerPedidoPorId(req, res) {
     try {
-        const id = Number(req.params.id);
-        const pedidos = JSON.parse(fs.readFileSync(pedidosPath, 'utf-8'));
-        const pedido = pedidos.find(p => p.id === id);
+        const pedido = await Pedido.findById(req.params.id)
+            .populate('clienteId', 'nombre tipo configuracion_logistica.zona_reparto')
+            .populate('detalles.productoId', 'nombre precio');
 
         if (!pedido) {
             return res.status(404).json({ error: 'Pedido no encontrado' });
@@ -106,23 +116,19 @@ function obtenerPedidoPorId(req, res) {
 }
 
 /* UPDATE ESTADO */
-function actualizarEstadoPedido(req, res) {
+async function actualizarEstadoPedido(req, res) {
     try {
-        const id = Number(req.params.id);
         const { estado } = req.body;
 
         if (!estado) {
             return res.status(400).json({ error: 'Falta el campo estado' });
         }
 
-        const pedidos = JSON.parse(fs.readFileSync(pedidosPath, 'utf-8'));
-        const pedidoIndex = pedidos.findIndex(p => p.id === id);
+        const pedido = await Pedido.findById(req.params.id);
 
-        if (pedidoIndex === -1) {
+        if (!pedido) {
             return res.status(404).json({ error: 'Pedido no encontrado' });
         }
-
-        const estadoActual = pedidos[pedidoIndex].estado;
 
         const transicionesValidas = {
             'pendiente': 'en producción',
@@ -131,7 +137,7 @@ function actualizarEstadoPedido(req, res) {
             'entregado': null
         };
 
-        const siguienteEstado = transicionesValidas[estadoActual];
+        const siguienteEstado = transicionesValidas[pedido.estado];
 
         if (!siguienteEstado) {
             return res.status(400).json({ error: 'El pedido ya fue entregado y no puede cambiar de estado' });
@@ -139,15 +145,18 @@ function actualizarEstadoPedido(req, res) {
 
         if (estado !== siguienteEstado) {
             return res.status(400).json({
-                error: `Transición inválida. Solo se permite pasar de "${estadoActual}" a "${siguienteEstado}"`
+                error: `Transición inválida. Solo se permite pasar de "${pedido.estado}" a "${siguienteEstado}"`
             });
         }
 
-        pedidos[pedidoIndex].estado = estado;
+        pedido.estado = estado;
+        await pedido.save();
 
-        fs.writeFileSync(pedidosPath, JSON.stringify(pedidos, null, 2));
+        const pedidoActualizado = await Pedido.findById(pedido._id)
+            .populate('clienteId', 'nombre tipo')
+            .populate('detalles.productoId', 'nombre');
 
-        res.json(pedidos[pedidoIndex]);
+        res.json(pedidoActualizado);
 
     } catch (error) {
         res.status(500).json({ error: 'Error interno del servidor' });
