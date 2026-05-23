@@ -22,7 +22,7 @@ block content
         select#clienteId(name="clienteId" required)
           option(value="" disabled selected) Seleccioná tu sucursal o franquicia
           each cliente in clientes
-            option(value=cliente._id)= cliente.nombre + ' (' + cliente.tipo + ')'
+            option(value=cliente._id)= cliente.nombre
 
       .form-group
         label Fecha del pedido
@@ -66,9 +66,14 @@ block content
       const contenedor = document.getElementById('contenedor-detalles');
       const idx = filaIndex++;
 
-      const opciones = productos.map(p =>
-        `<option value="${p._id}" data-precio="${p.precio}">${p.nombre} — $${p.precio.toLocaleString('es-AR')}</option>`
-      ).join('');
+      const opciones = productos.map(p => {
+        const agotado = p.stock <= 0;
+        const texto = agotado 
+            ? `${p.nombre} (sin stock)` 
+            : `${p.nombre} — $${p.precio.toLocaleString('es-AR')}`;
+        const attrs = agotado ? 'disabled style="color: var(--text-muted);"' : '';
+        return `<option value="${p._id}" data-precio="${p.precio}" ${attrs}>${texto}</option>`;
+      }).join('');
 
       const fila = document.createElement('div');
       fila.className = 'detalle-row';

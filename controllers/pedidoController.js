@@ -74,6 +74,13 @@ async function crearPedido(req, res) {
 
         await nuevoPedido.save();
 
+        // Descontar el stock de los productos solicitados
+        for (const detalle of detallesProcesados) {
+            await Producto.findByIdAndUpdate(detalle.productoId, {
+                $inc: { stock: -detalle.cantidad }
+            });
+        }
+
         const pedidoCreado = await Pedido.findById(nuevoPedido._id)
             .populate('clienteId', 'nombre tipo')
             .populate('detalles.productoId', 'nombre');
