@@ -449,8 +449,64 @@ body::before {
   border-bottom: none;
 }
 
+/* ── Badges de Estado ── */
+.estado-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.04em;
+}
+.estado-pendiente      { background: rgba(245,200,66,0.15);  color: #f5c842; border: 1px solid rgba(245,200,66,0.3);  }
+.estado-en-producción  { background: rgba(100,160,255,0.15); color: #7eb3ff; border: 1px solid rgba(100,160,255,0.3); }
+.estado-despachado     { background: rgba(180,120,255,0.15); color: #c99dff; border: 1px solid rgba(180,120,255,0.3); }
+.estado-entregado      { background: rgba(76,175,125,0.15);  color: #4caf7d; border: 1px solid rgba(76,175,125,0.3);  }
+.tipo-franquicia       { background: rgba(212,160,23,0.12);  color: #d4a017; border: 1px solid rgba(212,160,23,0.25); }
+.tipo-sucursal         { background: rgba(80,180,220,0.12);  color: #50b4dc; border: 1px solid rgba(80,180,220,0.25); }
+
+/* ── Vista Confirmación ── */
+.confirmacion-icon {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+.detalle-resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.resumen-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.resumen-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+.resumen-valor {
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: right;
+}
+.confirmacion-acciones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 600px) {
   .portal-header { padding: 1rem; }
   .card { padding: 1.75rem 1.25rem; }
   .detalle-row { grid-template-columns: 1fr; }
+  .portal-grid { grid-template-columns: 1fr; }
+  .total-box { flex-direction: column; align-items: flex-end; gap: 0.5rem; }
 }

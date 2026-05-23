@@ -2,8 +2,8 @@ extends layout-portal
 
 block nav-extra
   a(href="/portal") ← Volver al portal
-  span.nav-badge #{sesion.nombre}
   a(href="/portal/logout") Cerrar sesión
+
 
 block content
   .card(style="max-width: 680px; width: 100%")
@@ -16,8 +16,13 @@ block content
         span= error
 
     form#form-pedido(action="/pedidos" method="POST")
-      //- clienteId viene de la sesión del usuario logueado
-      input(type="hidden" name="clienteId" value=sesion.clienteId)
+      // - al no usar sesión se muestra el listado de franquicias
+      .form-group
+        label(for="clienteId") Sucursal / Franquicia
+        select#clienteId(name="clienteId" required)
+          option(value="" disabled selected) Seleccioná tu sucursal o franquicia
+          each cliente in clientes
+            option(value=cliente._id)= cliente.nombre + ' (' + cliente.tipo + ')'
 
       .form-group
         label Fecha del pedido

@@ -5,6 +5,7 @@ block nav-extra
   span.nav-badge Administrador
   a(href="/admin/logout" style="color:var(--text-muted); font-size:0.85rem;") Cerrar sesión
 
+
 block content
   .card(style="max-width: 1000px; width: 100%;")
     h2.section-title Pedidos
@@ -59,19 +60,3 @@ block content
               td
                 span(class="estado-badge estado-" + pedido.estado.replace(' ', '-'))= pedido.estado
 
-  style.
-    .estado-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: capitalize;
-      letter-spacing: 0.04em;
-    }
-    .estado-pendiente      { background: rgba(245,200,66,0.15);  color: #f5c842; border: 1px solid rgba(245,200,66,0.3);  }
-    .estado-en-producción  { background: rgba(100,160,255,0.15); color: #7eb3ff; border: 1px solid rgba(100,160,255,0.3); }
-    .estado-despachado     { background: rgba(180,120,255,0.15); color: #c99dff; border: 1px solid rgba(180,120,255,0.3); }
-    .estado-entregado      { background: rgba(76,175,125,0.15);  color: #4caf7d; border: 1px solid rgba(76,175,125,0.3);  }
-    .tipo-franquicia       { background: rgba(212,160,23,0.12);  color: #d4a017; border: 1px solid rgba(212,160,23,0.25); }
-    .tipo-sucursal         { background: rgba(80,180,220,0.12);  color: #50b4dc; border: 1px solid rgba(80,180,220,0.25); }
