@@ -15,4 +15,7 @@ router.get('/', portalController.mostrarPortal);
 // Formulario de nuevo pedido
 router.get('/nuevo-pedido', portalController.mostrarNuevoPedido);
 
+// Mis pedidos
+router.get('/mis-pedidos', portalController.mostrarMisPedidos);
+
 module.exports = router;

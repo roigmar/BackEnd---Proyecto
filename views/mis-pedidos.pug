@@ -1,0 +1,50 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/portal") ← Volver al portal
+  a(href="/portal/logout") Cerrar sesión
+
+
+block content
+  .card(style="max-width: 900px; width: 100%;")
+    h2.section-title Mis Pedidos
+    p.section-sub Consultá el estado de los pedidos de tu sucursal o franquicia.
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    form(method="GET" action="/portal/mis-pedidos" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;")
+      .form-group(style="margin-bottom: 0; flex-grow: 1; min-width: 250px;")
+        label(for="clienteId") Seleccioná tu sucursal o franquicia:
+        select#clienteId(name="clienteId" onchange="this.form.submit()" required style="width: 100%; background:var(--bg-input); border:1px solid var(--border); color:var(--text-main); border-radius:6px; padding:0.45rem 0.75rem;")
+          option(value="" disabled selected=(!clienteId)) -- Seleccionar --
+          each cliente in clientes
+            option(value=cliente._id selected=(clienteId === cliente._id.toString()))= cliente.nombre + ' (' + cliente.tipo + ')'
+      
+    if clienteId
+      if !pedidos || pedidos.length === 0
+        p(style="color: var(--text-muted); text-align:center; padding: 2.5rem;") No tenés pedidos registrados.
+      else
+        table.portal-table
+          thead
+            tr
+              th Fecha
+              th Productos
+              th Total
+              th Estado
+          tbody
+            each pedido in pedidos
+              tr
+                td= new Date(pedido.fecha).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
+                td
+                  ul(style="margin:0; padding-left:1rem; font-size:0.82rem; color:var(--text-muted);")
+                    each detalle in pedido.detalles
+                      li
+                        | #{detalle.productoId ? detalle.productoId.nombre : 'Producto eliminado'}
+                        span(style="color:var(--gold-dark);")  ×#{detalle.cantidad}
+                td $#{pedido.total.toLocaleString('es-AR')}
+                td
+                  span(class="estado-badge estado-" + pedido.estado.replace(' ', '-'))= pedido.estado
+

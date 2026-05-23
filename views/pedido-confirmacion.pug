@@ -1,0 +1,63 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/portal") ← Volver al portal
+
+block content
+  .card(style="max-width: 680px; width: 100%;")
+
+    if error
+      .confirmacion-icon(style="color:#e57373;") ❌
+      h2.section-title(style="text-align:center;") Error al registrar el pedido
+      p.section-sub(style="text-align:center;")= error
+      a.btn.btn-primary(href="/portal/nuevo-pedido") Intentar nuevamente
+
+    else
+      .confirmacion-icon ✅
+      h2.section-title(style="text-align:center;") ¡Pedido registrado!
+      p.section-sub(style="text-align:center; margin-bottom:1.5rem;")
+        | Tu pedido fue recibido correctamente y está en estado&nbsp;
+        span.estado-badge.estado-pendiente pendiente
+
+      //- ── Datos del pedido ──
+      .detalle-resumen
+        .resumen-fila
+          span.resumen-label Nro. de pedido
+          span.resumen-valor(style="font-size:0.78rem; color:var(--text-muted);")= pedido._id
+
+        .resumen-fila
+          span.resumen-label Cliente
+          span.resumen-valor= pedido.clienteId.nombre
+
+        .resumen-fila
+          span.resumen-label Fecha
+          span.resumen-valor= new Date(pedido.fecha).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+
+      hr.divider
+
+      //- ── Tabla de productos ──
+      table.portal-table
+        thead
+          tr
+            th Producto
+            th Cantidad
+            th Precio unit.
+            th Subtotal
+        tbody
+          each detalle in pedido.detalles
+            tr
+              td= detalle.productoId.nombre
+              td= detalle.cantidad
+              td $#{detalle.precioUnitario.toLocaleString('es-AR')}
+              td $#{detalle.subtotal.toLocaleString('es-AR')}
+
+      .total-box(style="margin-top:1rem;")
+        span.total-label Total del pedido
+        span.total-value $#{pedido.total.toLocaleString('es-AR')}
+
+      hr.divider
+
+      .confirmacion-acciones
+        a.btn.btn-secondary(href="/portal/nuevo-pedido") ＋ Nuevo pedido
+        a.btn.btn-primary(href="/portal") Volver al portal
+

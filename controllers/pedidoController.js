@@ -78,9 +78,20 @@ async function crearPedido(req, res) {
             .populate('clienteId', 'nombre tipo')
             .populate('detalles.productoId', 'nombre');
 
+        // Si la petición viene del formulario del portal se renderiza vista
+        // Si viene de un cliente API (Postman, fetch) se devolve JSON
+        if (req.accepts('html')) {
+            return res.render('pedido-confirmacion', { pedido: pedidoCreado });
+        }
         res.status(201).json(pedidoCreado);
 
     } catch (error) {
+        if (req.accepts('html')) {
+            return res.status(500).render('pedido-confirmacion', {
+                pedido: null,
+                error: 'Error interno al guardar el pedido.'
+            });
+        }
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
