@@ -10,7 +10,6 @@ const usuarioSchema = new Schema({
         lowercase: true
     },
 
-    // Contraseña almacenada como hash SHA-256 (crypto nativo de Node)
     password: {
         type: String,
         required: [true, 'La contraseña es obligatoria']

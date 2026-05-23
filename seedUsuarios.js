@@ -1,13 +1,8 @@
 require('dotenv').config();
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Cliente = require('./models/cliente');
 const Usuario = require('./models/usuario');
 const usuariosData = require('./data/usuarios.json');
-
-function hashPassword(plain) {
-    return crypto.createHash('sha256').update(plain).digest('hex');
-}
 
 mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
@@ -15,30 +10,29 @@ mongoose.connect(process.env.MONGO_URI)
 
         const totalClientes = await Cliente.countDocuments();
         if (totalClientes === 0) {
-            console.error('❌ No hay clientes en la base de datos.');
-            console.error('   Ejecutá primero: node seedClientes.js\n');
+            console.error('No hay clientes en la base de datos.');
+            console.error('Ejecutá primero: node seedClientes.js\n');
             return mongoose.connection.close();
         }
 
         await Usuario.deleteMany();
-        console.log('🗑️  Colección de usuarios limpiada.\n');
+        console.log('Colección de usuarios limpiada.\n');
 
         const resultados = [];
         const errores = [];
 
         for (const dato of usuariosData) {
             const docUsuario = {
-                usuario: dato.usuario,
-                password: hashPassword(dato.passwordPlain),
-                rol: dato.rol,
-                activo: true
+                usuario:  dato.usuario,
+                password: dato.passwordPlain, // texto plano
+                rol:      dato.rol,
+                activo:   true
             };
 
-            // Solo los CLIENTE necesitan clienteId
             if (dato.rol === 'CLIENTE') {
                 const cliente = await Cliente.findOne({ nombre: dato.clienteNombre });
                 if (!cliente) {
-                    errores.push(`  ⚠️  Cliente no encontrado: "${dato.clienteNombre}"`);
+                    errores.push(`Cliente no encontrado: "${dato.clienteNombre}"`);
                     continue;
                 }
                 docUsuario.clienteId = cliente._id;
@@ -50,21 +44,20 @@ mongoose.connect(process.env.MONGO_URI)
             await new Usuario(docUsuario).save();
         }
 
-        console.log(`✅ ${resultados.length} usuarios creados:\n`);
+        console.log(`${resultados.length} usuarios creados:\n`);
         resultados.forEach(r => {
-            console.log(`   [${r.tipo}] usuario: ${r.usuario.padEnd(25)} → ${r.nombre}`);
+            console.log(`[${r.tipo}] ${r.usuario.padEnd(28)} → ${r.nombre}`);
         });
 
         if (errores.length > 0) {
-            console.log('\n⚠️  Advertencias:');
+            console.log('\nAdvertencias:');
             errores.forEach(e => console.log(e));
         }
 
-        console.log('\n📋 Credenciales de acceso:');
+        console.log('\nCredenciales de acceso:');
         console.log('─'.repeat(55));
         usuariosData.forEach(d => {
-            const tipo = d.rol === 'ADMIN' ? 'ADMIN   ' : d.clienteNombre?.split(' ')[0];
-            console.log(`   ${d.usuario.padEnd(28)} | ${d.passwordPlain.padEnd(14)} | ${tipo}`);
+            console.log(`${d.usuario.padEnd(28)} | ${d.passwordPlain}`);
         });
         console.log('─'.repeat(55));
 

@@ -1,24 +1,19 @@
-const crypto = require('crypto');
 const Usuario = require('../models/usuario');
 const Producto = require('../models/producto');
-const { obtenerSesion, crearSesion, destruirSesion } = require('../utils/sesion');
-
-function hashPassword(plain) {
-    return crypto.createHash('sha256').update(plain).digest('hex');
-}
+const Cliente  = require('../models/cliente');
+const Pedido   = require('../models/pedido');
 
 function fechaHoy() {
     return new Date().toISOString().split('T')[0];
 }
 
-
 // GET /portal/login
 exports.mostrarLogin = (req, res) => {
-    if (obtenerSesion(req)) return res.redirect('/portal');
     res.render('login', { error: null });
 };
 
-// POST /portal/login  (compartido con admin)
+// POST /portal/login
+// Valida credenciales contra la BD. Si son correctas redirige al portal.
 exports.procesarLogin = async (req, res) => {
     const { usuario, password } = req.body;
 
@@ -29,39 +24,16 @@ exports.procesarLogin = async (req, res) => {
     try {
         const usuarioEncontrado = await Usuario.findOne({
             usuario: usuario.trim().toLowerCase(),
-            activo: true
-        }).populate('clienteId');
+            activo:  true
+        });
 
-        if (!usuarioEncontrado || hashPassword(password) !== usuarioEncontrado.password) {
+        // Comparación directa
+        if (!usuarioEncontrado || password !== usuarioEncontrado.password) {
             return res.render('login', { error: 'Usuario o contraseña incorrectos.' });
         }
 
-        // Admin: no tiene cliente asociado
-        if (usuarioEncontrado.rol === 'ADMIN') {
-            crearSesion(res, {
-                usuarioId: usuarioEncontrado._id.toString(),
-                usuario:   usuarioEncontrado.usuario,
-                rol:       'ADMIN',
-                nombre:    'Administrador'
-            });
-            return res.redirect('/admin');
-        }
-
-        // Cliente: sucursal o franquicia
-        const cliente = usuarioEncontrado.clienteId;
-        if (!cliente || !cliente.activo) {
-            return res.render('login', { error: 'Tu cuenta está desactivada. Contactá a administración.' });
-        }
-
-        crearSesion(res, {
-            usuarioId: usuarioEncontrado._id.toString(),
-            usuario:   usuarioEncontrado.usuario,
-            rol:       'CLIENTE',
-            clienteId: cliente._id.toString(),
-            nombre:    cliente.nombre,
-            tipo:      cliente.tipo,
-            zona:      cliente.configuracion_logistica?.zona_reparto || ''
-        });
+        // Redirigir según el rol del usuario
+        if (usuarioEncontrado.rol === 'ADMIN') return res.redirect('/admin');
         res.redirect('/portal');
 
     } catch (err) {
@@ -70,33 +42,50 @@ exports.procesarLogin = async (req, res) => {
     }
 };
 
-// GET /portal  (solo CLIENTE)
+// GET /portal
 exports.mostrarPortal = (req, res) => {
-    const sesion = obtenerSesion(req);
-    if (!sesion) return res.redirect('/portal/login');
-    if (sesion.rol === 'ADMIN') return res.redirect('/admin');
-    res.render('portal', { sesion });
+    res.render('portal');
 };
 
-// GET /portal/nuevo-pedido  (solo CLIENTE)
+// GET /portal/nuevo-pedido
 exports.mostrarNuevoPedido = async (req, res) => {
-    const sesion = obtenerSesion(req);
-    if (!sesion) return res.redirect('/portal/login');
-    if (sesion.rol === 'ADMIN') return res.redirect('/admin');
-
     try {
         const productos = await Producto.find().lean();
-        res.render('nuevo-pedido', { sesion, productos, fechaHoy: fechaHoy(), error: null });
+        const clientes  = await Cliente.find({ activo: true }).lean();
+        res.render('nuevo-pedido', { productos, clientes, fechaHoy: fechaHoy(), error: null });
     } catch (err) {
         res.status(500).render('nuevo-pedido', {
-            sesion, productos: [], fechaHoy: fechaHoy(),
-            error: 'No se pudo cargar el catálogo de productos.'
+            productos: [], clientes: [], fechaHoy: fechaHoy(),
+            error: 'No se pudo cargar el formulario.'
+        });
+    }
+};
+
+// GET /portal/mis-pedidos
+exports.mostrarMisPedidos = async (req, res) => {
+    try {
+        const { clienteId } = req.query;
+        const clientes = await Cliente.find({ activo: true }).lean();
+        
+        let pedidos = [];
+        if (clienteId) {
+            pedidos = await Pedido.find({ clienteId })
+                .populate('detalles.productoId', 'nombre')
+                .sort({ fecha: -1 })
+                .lean();
+        }
+        
+        res.render('mis-pedidos', { clientes, pedidos, clienteId, error: null });
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('mis-pedidos', {
+            clientes: [], pedidos: [], clienteId: null,
+            error: 'Error al cargar los pedidos.'
         });
     }
 };
 
 // GET /portal/logout
 exports.logout = (req, res) => {
-    destruirSesion(req, res);
     res.redirect('/portal/login');
 };
