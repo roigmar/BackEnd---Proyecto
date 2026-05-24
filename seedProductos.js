@@ -1,7 +1,9 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const Producto = require('./models/producto');
-const productos = require('./data/productos.json');
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import Producto from './models/producto.js';
+import { readFileSync } from 'fs';
+
+const productos = JSON.parse(readFileSync('./data/productos.json', 'utf-8'));
 
 mongoose.connect(process.env.MONGO_URI)
     .then(async () => {

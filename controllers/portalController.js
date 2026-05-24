@@ -1,20 +1,19 @@
-const Usuario = require('../models/usuario');
-const Producto = require('../models/producto');
-const Cliente  = require('../models/cliente');
-const Pedido   = require('../models/pedido');
+import Usuario from '../models/usuario.js';
+import Producto from '../models/producto.js';
+import Cliente from '../models/cliente.js';
+import Pedido from '../models/pedido.js';
 
 function fechaHoy() {
     return new Date().toISOString().split('T')[0];
 }
 
 // GET /portal/login
-exports.mostrarLogin = (req, res) => {
+export const mostrarLogin = (req, res) => {
     res.render('login', { error: null });
 };
 
 // POST /portal/login
-// Valida credenciales contra la BD. Si son correctas redirige al portal.
-exports.procesarLogin = async (req, res) => {
+export const procesarLogin = async (req, res) => {
     const { usuario, password } = req.body;
 
     if (!usuario || !password) {
@@ -27,12 +26,10 @@ exports.procesarLogin = async (req, res) => {
             activo:  true
         });
 
-        // Comparación directa
         if (!usuarioEncontrado || password !== usuarioEncontrado.password) {
             return res.render('login', { error: 'Usuario o contraseña incorrectos.' });
         }
 
-        // Redirigir según el rol del usuario
         if (usuarioEncontrado.rol === 'ADMIN') return res.redirect('/admin');
         res.redirect('/portal');
 
@@ -43,12 +40,12 @@ exports.procesarLogin = async (req, res) => {
 };
 
 // GET /portal
-exports.mostrarPortal = (req, res) => {
+export const mostrarPortal = (req, res) => {
     res.render('portal');
 };
 
 // GET /portal/nuevo-pedido
-exports.mostrarNuevoPedido = async (req, res) => {
+export const mostrarNuevoPedido = async (req, res) => {
     try {
         const productos = await Producto.find().lean();
         const clientes  = await Cliente.find({ activo: true }).lean();
@@ -62,7 +59,7 @@ exports.mostrarNuevoPedido = async (req, res) => {
 };
 
 // GET /portal/mis-pedidos
-exports.mostrarMisPedidos = async (req, res) => {
+export const mostrarMisPedidos = async (req, res) => {
     try {
         const { clienteId } = req.query;
         const clientes = await Cliente.find({ activo: true }).lean();
@@ -86,6 +83,6 @@ exports.mostrarMisPedidos = async (req, res) => {
 };
 
 // GET /portal/logout
-exports.logout = (req, res) => {
+export const logout = (req, res) => {
     res.redirect('/portal/login');
 };

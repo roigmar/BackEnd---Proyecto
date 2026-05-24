@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import * as portalController from '../controllers/portalController.js';
 const router = express.Router();
-const portalController = require('../controllers/portalController');
 
 // Login
 router.get('/login', portalController.mostrarLogin);
@@ -18,4 +18,4 @@ router.get('/nuevo-pedido', portalController.mostrarNuevoPedido);
 // Mis pedidos
 router.get('/mis-pedidos', portalController.mostrarMisPedidos);
 
-module.exports = router;
+export default router;

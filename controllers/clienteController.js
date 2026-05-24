@@ -1,11 +1,10 @@
-const Cliente = require('../models/cliente');
+import Cliente from '../models/cliente.js';
 
 // Crear un nuevo cliente (Punto de Venta)
-exports.crearCliente = async (req, res) => {
+export const crearCliente = async (req, res) => {
     try {
         const { nombre, tipo, configuracion_logistica, finanzas } = req.body;
 
-        // Validaciones básicas
         if (!nombre || !tipo || !configuracion_logistica?.direccion_entrega) {
             return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombre, tipo y dirección de entrega' });
         }
@@ -25,7 +24,7 @@ exports.crearCliente = async (req, res) => {
 };
 
 // Obtener todos los clientes (Solo los activos por defecto)
-exports.obtenerClientes = async (req, res) => {
+export const obtenerClientes = async (req, res) => {
     try {
         const { incluirInactivos } = req.query;
         const filtro = incluirInactivos === 'true' ? {} : { activo: true };
@@ -38,7 +37,7 @@ exports.obtenerClientes = async (req, res) => {
 };
 
 // Obtener un cliente por ID
-exports.obtenerClientePorId = async (req, res) => {
+export const obtenerClientePorId = async (req, res) => {
     try {
         const cliente = await Cliente.findById(req.params.id);
         if (!cliente) {
@@ -51,7 +50,7 @@ exports.obtenerClientePorId = async (req, res) => {
 };
 
 // Actualizar un cliente
-exports.actualizarCliente = async (req, res) => {
+export const actualizarCliente = async (req, res) => {
     try {
         const clienteActualizado = await Cliente.findByIdAndUpdate(
             req.params.id,
@@ -70,7 +69,7 @@ exports.actualizarCliente = async (req, res) => {
 };
 
 // Eliminar un cliente (BAJA LÓGICA)
-exports.eliminarCliente = async (req, res) => {
+export const eliminarCliente = async (req, res) => {
     try {
         const clienteDesactivado = await Cliente.findByIdAndUpdate(
             req.params.id,

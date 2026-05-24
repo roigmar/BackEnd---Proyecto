@@ -1,8 +1,14 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const app = express();
+import 'dotenv/config';
+import express from 'express';
+import mongoose from 'mongoose';
 
+import productoRoutes from './routes/productoRoutes.js';
+import pedidosRoutes from './routes/pedidoRoutes.js';
+import clienteRoutes from './routes/clienteRoutes.js';
+import portalRoutes from './routes/portalRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+
+const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -11,15 +17,8 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log("Conectado a MongoDB con éxito"))
     .catch((err) => console.error("Error al conectar a MongoDB:", err));
 
-const productoRoutes = require("./routes/productoRoutes");
-const pedidosRoutes = require("./routes/pedidoRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
-const portalRoutes = require("./routes/portalRoutes");
-const adminRoutes  = require("./routes/adminRoutes");
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 // Configura el motor de vistas Pug
 app.set("view engine", "pug");

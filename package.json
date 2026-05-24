@@ -4,7 +4,7 @@
   "description": "Materia Desarrollo web back end. Proyecto grupal, grupo: Dragonfly",
   "license": "ISC",
   "author": "Dragonfly",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -14,7 +14,6 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongodb": "^7.2.0",
     "mongoose": "^9.6.2",
     "pug": "^3.0.4"
   },

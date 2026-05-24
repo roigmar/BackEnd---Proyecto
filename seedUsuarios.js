@@ -1,8 +1,10 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const Cliente = require('./models/cliente');
-const Usuario = require('./models/usuario');
-const usuariosData = require('./data/usuarios.json');
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import Cliente from './models/cliente.js';
+import Usuario from './models/usuario.js';
+import { readFileSync } from 'fs';
+
+const usuariosData = JSON.parse(readFileSync('./data/usuarios.json', 'utf-8'));
 
 mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
@@ -24,7 +26,7 @@ mongoose.connect(process.env.MONGO_URI)
         for (const dato of usuariosData) {
             const docUsuario = {
                 usuario:  dato.usuario,
-                password: dato.passwordPlain, // texto plano
+                password: dato.passwordPlain,
                 rol:      dato.rol,
                 activo:   true
             };

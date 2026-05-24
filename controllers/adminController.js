@@ -1,13 +1,13 @@
-const Producto = require('../models/producto');
-const Pedido   = require('../models/pedido');
+import Producto from '../models/producto.js';
+import Pedido from '../models/pedido.js';
 
 // GET /admin
-exports.mostrarAdmin = (req, res) => {
+export const mostrarAdmin = (req, res) => {
     res.render('admin');
 };
 
 // GET /admin/pedidos
-exports.mostrarPedidos = async (req, res) => {
+export const mostrarPedidos = async (req, res) => {
     const { estado } = req.query;
     const filtro = estado ? { estado } : {};
 
@@ -29,7 +29,7 @@ exports.mostrarPedidos = async (req, res) => {
 };
 
 // GET /admin/productos
-exports.catalogo = async (req, res) => {
+export const catalogo = async (req, res) => {
     try {
         const productos = await Producto.find().lean();
         res.render('catalogo', { productos });
@@ -39,12 +39,12 @@ exports.catalogo = async (req, res) => {
 };
 
 // GET /admin/productos/nuevo
-exports.formularioNuevo = (req, res) => {
+export const formularioNuevo = (req, res) => {
     res.render('nuevo', { error: null });
 };
 
 // POST /admin/productos/nuevo
-exports.crearProductoVista = async (req, res) => {
+export const crearProductoVista = async (req, res) => {
     try {
         let { nombre, precio, descripcion, stock } = req.body;
         precio = parseFloat(precio);
@@ -68,6 +68,6 @@ exports.crearProductoVista = async (req, res) => {
 };
 
 // GET /admin/logout
-exports.logout = (req, res) => {
+export const logout = (req, res) => {
     res.redirect('/portal/login');
 };

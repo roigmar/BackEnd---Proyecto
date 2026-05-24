@@ -1,5 +1,5 @@
-const Producto = require('../models/producto');
-const Pedido = require('../models/pedido');
+import Producto from '../models/producto.js';
+import Pedido from '../models/pedido.js';
 
 /* CREATE */
 async function crearProducto(req, res) {
@@ -166,7 +166,7 @@ async function crearProductoVista(req, res) {
     }
 }
 
-module.exports = {
+export {
     crearProducto,
     obtenerProductos,
     obtenerProductoPorId,

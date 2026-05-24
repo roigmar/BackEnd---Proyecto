@@ -1,6 +1,6 @@
-const Pedido = require('../models/pedido');
-const Cliente = require('../models/cliente');
-const Producto = require('../models/producto');
+import Pedido from '../models/pedido.js';
+import Cliente from '../models/cliente.js';
+import Producto from '../models/producto.js';
 
 /* CREATE */
 async function crearPedido(req, res) {
@@ -74,7 +74,6 @@ async function crearPedido(req, res) {
 
         await nuevoPedido.save();
 
-        // Descontar el stock de los productos solicitados
         for (const detalle of detallesProcesados) {
             await Producto.findByIdAndUpdate(detalle.productoId, {
                 $inc: { stock: -detalle.cantidad }
@@ -85,8 +84,6 @@ async function crearPedido(req, res) {
             .populate('clienteId', 'nombre tipo')
             .populate('detalles.productoId', 'nombre');
 
-        // Si la petición viene del formulario del portal se renderiza vista
-        // Si viene de un cliente API (Postman, fetch) se devolve JSON
         if (req.accepts('html')) {
             return res.render('pedido-confirmacion', { pedido: pedidoCreado });
         }
@@ -181,7 +178,7 @@ async function actualizarEstadoPedido(req, res) {
     }
 }
 
-module.exports = {
+export {
     crearPedido,
     obtenerPedidos,
     obtenerPedidoPorId,
