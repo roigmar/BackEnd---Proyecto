@@ -18,7 +18,7 @@ MONGO_URI=mongodb://localhost:27017/la-espiga-de-oro
 
 5. Cargar los datos iniciales ejecutando los seeds en este orden:
 ```bash
-node seed.js
+node seedProductos.js
 node seedClientes.js
 node seedUsuarios.js
 node seedPedidos.js
