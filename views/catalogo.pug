@@ -12,10 +12,27 @@ block content
       a(href="/admin/productos/nuevo").btn.btn-secondary(style="padding:0.45rem 1rem; font-size:0.85rem;") ＋ Nuevo producto
     p.section-sub(style="margin-bottom: 1.5rem;") Listado completo de productos disponibles.
 
+    // Buscador de productos (filtra por nombre)
+    .search-container
+      form.search-form(method="GET" action="/admin/productos")
+        .search-input-wrapper
+          span.search-icon 🔍
+          input.search-input(type="search" name="q" placeholder="Buscar por nombre..." value=(q || ''))
+
     if error
       .alert.alert-error
         span ⚠️
         span= error
+
+    if msg
+      .alert.alert-success
+        span ✅
+        if msg == 'creado'
+          span Producto creado correctamente.
+        else if msg == 'actualizado'
+          span Producto actualizado correctamente.
+        else
+          span Operación realizada correctamente.
 
     if !productos || productos.length === 0
       p(style="color: var(--text-muted); text-align:center; padding: 2rem;") No hay productos cargados.
@@ -27,6 +44,7 @@ block content
             th Precio
             th Descripción
             th Stock
+            th Acciones
         tbody
           each producto in productos
             tr
@@ -34,3 +52,6 @@ block content
               td $#{producto.precio.toLocaleString('es-AR')}
               td= producto.descripcion
               td= producto.stock
+              td.actions-column
+                a.btn.action-btn.btn-edit(href='/admin/productos/' + producto._id + '/editar' title="Editar producto")
+                  span.icon ✏️

@@ -503,6 +503,73 @@ body::before {
   flex-wrap: wrap;
 }
 
+/* ── Buscador reutilizable (catálogo) ── */
+.search-container {
+  margin-bottom: 1.25rem;
+}
+
+.search-form {
+  max-width: 680px;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.search-icon {
+  font-size: 1rem;
+  color: var(--text-muted);
+  padding: 0 0.35rem;
+  line-height: 1;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  padding: 0.5rem 0.25rem;
+  width: 100%;
+  outline: none;
+}
+
+.search-input::placeholder { color: var(--text-muted); }
+
+/* ── Acciones en tabla ── */
+.actions-column { width: 120px; text-align: center; }
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.action-btn:hover {
+  border-color: var(--gold-dark);
+  color: var(--gold-light);
+  background: rgba(212,160,23,0.04);
+  transform: translateY(-1px);
+}
+
+.btn-edit { border-color: rgba(212,160,23,0.14); color: var(--gold-light); }
+
+.icon { display: inline-block; font-size: 0.95rem; line-height: 1; }
+
 @media (max-width: 600px) {
   .portal-header { padding: 1rem; }
   .card { padding: 1.75rem 1.25rem; }

@@ -7,53 +7,61 @@ block nav-extra
 
 block content
   .card(style="max-width: 520px; width: 100%;")
-    h2.section-title Nuevo Producto
-    p.section-sub Completá los datos para agregar un producto al catálogo.
+    if producto
+      h2.section-title Editar Producto
+      p.section-sub Modificá los datos del producto.
+    else
+      h2.section-title Nuevo Producto
+      p.section-sub Completá los datos para agregar un producto al catálogo.
 
     if error
       .alert.alert-error
         span ⚠️
         span= error
 
-    form(action="/admin/productos/nuevo" method="POST")
+    - var formAction = producto ? '/admin/productos/' + producto._id + '/editar' : '/admin/productos/nuevo'
+    form(action=formAction method='POST')
       .form-group
-        label(for="nombre") Nombre
+        label(for='nombre') Nombre
         input#nombre(
-          type="text"
-          name="nombre"
-          placeholder="Ej: Pan de molde"
+          type='text'
+          name='nombre'
+          placeholder='Ej: Pan de molde'
           required
+          value=(producto ? producto.nombre : '')
         )
 
       .form-group
-        label(for="precio") Precio ($)
+        label(for='precio') Precio ($)
         input#precio(
-          type="number"
-          name="precio"
-          min="0"
-          step="1"
-          placeholder="Ej: 1500"
+          type='number'
+          name='precio'
+          min='0'
+          step='1'
+          placeholder='Ej: 1500'
           required
+          value=(producto ? producto.precio : '')
         )
 
       .form-group
-        label(for="descripcion") Descripción
+        label(for='descripcion') Descripción
         textarea#descripcion(
-          name="descripcion"
-          placeholder="Breve descripción del producto"
+          name='descripcion'
+          placeholder='Breve descripción del producto'
           required
-        )
+        )= (producto ? producto.descripcion : '')
 
       .form-group
-        label(for="stock") Stock inicial
+        label(for='stock') Stock inicial
         input#stock(
-          type="number"
-          name="stock"
-          min="0"
-          step="1"
-          placeholder="Ej: 50"
+          type='number'
+          name='stock'
+          min='0'
+          step='1'
+          placeholder='Ej: 50'
           required
+          value=(producto ? producto.stock : '')
         )
 
-      button.btn.btn-primary(type="submit")
+      button.btn.btn-primary(type='submit')
         span Guardar producto
