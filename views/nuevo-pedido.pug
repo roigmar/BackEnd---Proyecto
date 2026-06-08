@@ -58,6 +58,12 @@ block content
       button.btn.btn-primary(type="submit")
         span Confirmar pedido
 
+  
+
+  // Tom Select: CDN (CSS + JS)
+  link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.default.min.css')
+  script(src='https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js')
+
   script.
     const productos = !{JSON.stringify(productos)};
     let filaIndex = 0;
@@ -100,11 +106,22 @@ block content
         <button type="button" class="btn btn-danger" onclick="eliminarFila('fila-${idx}')">✕</button>
       `;
       contenedor.appendChild(fila);
+      // inicializar Tom Select en el nuevo select si la librería está disponible
+      const selectEl = fila.querySelector('select');
+      if (window.TomSelect && selectEl) {
+        new TomSelect(selectEl, { create: false, maxItems: 1, placeholder: 'Seleccioná o escribí el nombre de un producto' });
+      }
       recalcular();
     }
 
     function eliminarFila(id) {
-      document.getElementById(id)?.remove();
+      const fila = document.getElementById(id);
+      if (!fila) return;
+      const selectEl = fila.querySelector('select');
+      if (selectEl && selectEl.tomselect) {
+        try { selectEl.tomselect.destroy(); } catch(e) {}
+      }
+      fila.remove();
       recalcular();
     }
 
@@ -125,3 +142,5 @@ block content
     }
 
     document.addEventListener('DOMContentLoaded', agregarDetalle);
+
+  

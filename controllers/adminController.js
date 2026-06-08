@@ -1,5 +1,6 @@
 import Producto from '../models/producto.js';
 import Pedido from '../models/pedido.js';
+import Cliente from '../models/cliente.js';
 
 // GET /admin
 export const mostrarAdmin = (req, res) => {
@@ -8,8 +9,10 @@ export const mostrarAdmin = (req, res) => {
 
 // GET /admin/pedidos
 export const mostrarPedidos = async (req, res) => {
-    const { estado } = req.query;
-    const filtro = estado ? { estado } : {};
+    const { estado, cliente } = req.query;
+    const filtro = {};
+    if (estado) filtro.estado = estado;
+    if (cliente) filtro.clienteId = cliente;
 
     try {
         const pedidos = await Pedido.find(filtro)
@@ -18,11 +21,14 @@ export const mostrarPedidos = async (req, res) => {
             .sort({ fecha: -1 })
             .lean();
 
-        res.render('pedidos-admin', { pedidos, estadoFiltro: estado || '' });
+        // obtener lista de clientes para el select de filtro
+        const clientes = await Cliente.find().select('_id nombre').lean();
+
+        res.render('pedidos-admin', { pedidos, estadoFiltro: estado || '', clientes, clienteFiltro: cliente || '' });
     } catch (err) {
         console.error(err);
         res.status(500).render('pedidos-admin', {
-            pedidos: [], estadoFiltro: '',
+            pedidos: [], estadoFiltro: '', clientes: [], clienteFiltro: '',
             error: 'Error al cargar los pedidos.'
         });
     }
