@@ -15,13 +15,8 @@ block content
         span ⚠️
         span= error
 
-    form(method="GET" action="/portal/mis-pedidos" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;")
-      .form-group(style="margin-bottom: 0; flex-grow: 1; min-width: 250px;")
-        label(for="clienteId") Seleccioná tu sucursal o franquicia:
-        select#clienteId(name="clienteId" onchange="this.form.submit()" required style="width: 100%; background:var(--bg-input); border:1px solid var(--border); color:var(--text-main); border-radius:6px; padding:0.45rem 0.75rem;")
-          option(value="" disabled selected=(!clienteId)) -- Seleccionar --
-          each cliente in clientes
-            option(value=cliente._id selected=(clienteId === cliente._id.toString()))= cliente.nombre + ' (' + cliente.tipo + ')'
+    div(style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 1rem;")
+      span(style="color: var(--text-main); font-weight: 600;") Pedidos de: #{clienteNombre}
       
     if clienteId
       if !pedidos || pedidos.length === 0
