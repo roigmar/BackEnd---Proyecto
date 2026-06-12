@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
+import session from 'express-session';
 
 import productoRoutes from './routes/productoRoutes.js';
 import pedidosRoutes from './routes/pedidoRoutes.js';
@@ -19,6 +20,23 @@ mongoose.connect(MONGO_URI)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configuración de Sesiones
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'la-espiga-de-oro-secret-key-123456',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // set to true in production with HTTPS
+        maxAge: 1000 * 60 * 60 * 2 // 2 horas de duración
+    }
+}));
+
+// Exponer la sesión a las vistas Pug
+app.use((req, res, next) => {
+    res.locals.usuario = req.session.usuario || null;
+    next();
+});
 
 // Configura el motor de vistas Pug
 app.set("view engine", "pug");

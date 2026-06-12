@@ -69,5 +69,12 @@ export const crearProductoVista = async (req, res) => {
 
 // GET /admin/logout
 export const logout = (req, res) => {
-    res.redirect('/portal/login');
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) console.error('Error destruyendo sesión admin:', err);
+            res.redirect('/portal/login');
+        });
+    } else {
+        res.redirect('/portal/login');
+    }
 };

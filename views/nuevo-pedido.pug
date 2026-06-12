@@ -16,13 +16,11 @@ block content
         span= error
 
     form#form-pedido(action="/pedidos" method="POST")
-      // - al no usar sesión se muestra el listado de franquicias
+      // - Usar el cliente autenticado en la sesión
       .form-group
-        label(for="clienteId") Sucursal / Franquicia
-        select#clienteId(name="clienteId" required)
-          option(value="" disabled selected) Seleccioná tu sucursal o franquicia
-          each cliente in clientes
-            option(value=cliente._id)= cliente.nombre
+        label Sucursal / Franquicia
+        input(type="text" value=cliente.nombre readonly style="cursor: not-allowed; opacity: 0.8; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; padding: 0.45rem 0.75rem; width: 100%;")
+        input(type="hidden" name="clienteId" value=cliente._id)
 
       .form-group
         label Fecha del pedido
