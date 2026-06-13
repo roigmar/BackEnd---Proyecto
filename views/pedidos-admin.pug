@@ -11,7 +11,7 @@ block content
     h2.section-title Pedidos
     p.section-sub(style="margin-bottom: 1.5rem;") Pedidos cargados por sucursales y franquicias.
 
-    //- ── Filtro por estado ──
+    //- ── Filtros: estado + cliente ──
     form(method="GET" action="/admin/pedidos" style="display:flex; gap:0.75rem; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap;")
       span(style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;") Filtrar por estado:
       select(name="estado" onchange="this.form.submit()" style="background:var(--bg-input); border:1px solid var(--border); color:var(--text-main); border-radius:6px; padding:0.45rem 0.75rem; font-size:0.9rem;")
@@ -20,6 +20,14 @@ block content
         option(value="en producción"  selected=(estadoFiltro === 'en producción'))  En producción
         option(value="despachado"     selected=(estadoFiltro === 'despachado'))     Despachado
         option(value="entregado"      selected=(estadoFiltro === 'entregado'))      Entregado
+
+      //- Filtro por cliente debajo
+      if clientes && clientes.length
+        span(style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;") Filtrar por cliente:
+        select(name="cliente" onchange="this.form.submit()" style="background:var(--bg-input); border:1px solid var(--border); color:var(--text-main); border-radius:6px; padding:0.45rem 0.75rem; font-size:0.9rem;")
+          option(value="" selected=(clienteFiltro === '')) Todos
+          each c in clientes
+            option(value=c._id selected=(clienteFiltro == c._id))= c.nombre
 
     if error
       .alert.alert-error
@@ -57,6 +65,80 @@ block content
                       | #{detalle.productoId ? detalle.productoId.nombre : 'Producto eliminado'}
                       span(style="color:var(--gold-dark);")  ×#{detalle.cantidad}
               td $#{pedido.total.toLocaleString('es-AR')}
-              td
-                span(class="estado-badge estado-" + pedido.estado.replace(' ', '-'))= pedido.estado
+              td.status-cell
+                - var transiciones = { 'pendiente': 'en producción', 'en producción': 'despachado', 'despachado': 'entregado' }
+                - var siguiente = transiciones[pedido.estado]
+                .status-dropdown(data-id=pedido._id)
+                  button.status-toggle(type='button' aria-expanded='false')
+                    span.estado-badge(class='estado-' + pedido.estado.replace(' ', '-'))= pedido.estado
+                    if siguiente
+                      span.caret ▾
+                  if siguiente
+                    .status-menu(role='menu' aria-hidden='true')
+                      button.status-action(type='button' role='menuitem' data-next=siguiente)= 'Pasar a: ' + siguiente
+
+      // script para manejar dropdown en la celda de estado y actualizar vía fetch PATCH sin recargar la página
+      script.
+        (function(){
+          async function cambiarEstado(id, nuevoEstado){
+            try{
+              const res = await fetch('/pedidos/' + id + '/estado', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: nuevoEstado })
+              });
+              if (!res.ok) {
+                const err = await res.json().catch(()=>({ error: 'Error' }));
+                alert(err.error || 'Error al actualizar estado');
+                return null;
+              }
+              return await res.json();
+            } catch(e){
+              alert('Error de red al actualizar estado');
+              return null;
+            }
+          }
+
+          document.addEventListener('click', async function(e){
+            const toggle = e.target.closest && e.target.closest('.status-toggle');
+            if (toggle){
+              const dropdown = toggle.parentElement;
+              const menu = dropdown.querySelector('.status-menu');
+              const expanded = toggle.getAttribute('aria-expanded') === 'true';
+              // cerrar otros abiertos
+              document.querySelectorAll('.status-dropdown .status-toggle[aria-expanded="true"]').forEach(el=>{ el.setAttribute('aria-expanded','false'); el.parentElement.querySelector('.status-menu').setAttribute('aria-hidden','true'); });
+              if (!expanded && menu){ toggle.setAttribute('aria-expanded','true'); menu.setAttribute('aria-hidden','false'); }
+              else if (menu){ toggle.setAttribute('aria-expanded','false'); menu.setAttribute('aria-hidden','true'); }
+              return;
+            }
+
+            const action = e.target.closest && e.target.closest('.status-action');
+            if (action){
+              const menu = action.closest('.status-menu');
+              const dropdown = action.closest('.status-dropdown');
+              const id = dropdown && dropdown.getAttribute('data-id');
+              const next = action.getAttribute('data-next');
+              if (!id || !next) return;
+              if (!confirm('Confirmar cambio de estado a: ' + next + '?')) return;
+              const result = await cambiarEstado(id, next);
+              if (result){
+                // actualizar badge en la celda sin recargar
+                const badge = dropdown.querySelector('.estado-badge');
+                if (badge) badge.textContent = result.estado;
+                // cerrar menu
+                const toggleBtn = dropdown.querySelector('.status-toggle');
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+                if (menu) menu.setAttribute('aria-hidden','true');
+                // actualizar clase del badge para estilos
+                if (badge){ badge.className = 'estado-badge estado-' + result.estado.replace(/\s+/g,'-'); }
+              }
+              return;
+            }
+
+            // clic fuera cierra menús
+            if (!e.target.closest || !e.target.closest('.status-dropdown')){
+              document.querySelectorAll('.status-dropdown .status-toggle[aria-expanded="true"]').forEach(el=>{ el.setAttribute('aria-expanded','false'); el.parentElement.querySelector('.status-menu').setAttribute('aria-hidden','true'); });
+            }
+          });
+        })();
 

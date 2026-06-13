@@ -43,6 +43,28 @@ async function obtenerProductos(req, res) {
     }
 }
 
+/* READ: Buscar productos por nombre (query param `q`) */
+async function obtenerProductoPorNombre(req, res) {
+    try {
+        const q = (req.query.q || '').trim();
+
+        if (!q) {
+            // Si no se envía término, devolvemos todos para comportamiento consistente
+            const productos = await Producto.find();
+            return res.json(productos);
+        }
+
+        // Búsqueda insensible a mayúsculas que encuentra coincidencias parciales
+        const productos = await Producto.find({
+            nombre: { $regex: q, $options: 'i' }
+        });
+
+        res.json(productos);
+    } catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
 async function obtenerProductoPorId(req, res) {
     try {
         const producto = await Producto.findById(req.params.id);
@@ -169,6 +191,7 @@ async function crearProductoVista(req, res) {
 export {
     crearProducto,
     obtenerProductos,
+    obtenerProductoPorNombre,
     obtenerProductoPorId,
     actualizarProducto,
     eliminarProducto,
