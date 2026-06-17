@@ -1,0 +1,46 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/admin") ← Volver al panel
+  span.nav-badge Administrador
+  a(href="/admin/logout" style="color:var(--text-muted); font-size:0.85rem;") Cerrar sesión
+
+block content
+  .card(style="max-width: 520px; width: 100%;")
+    h2.section-title Nuevo cliente
+    p.section-sub Completá los datos para crear una sucursal o franquicia
+
+    if error
+      .alert.alert-error
+        span ⚠️
+        span= error
+
+    form(action='/admin/clientes/nuevo' method='POST')
+      .form-group
+        label(for='nombre') Nombre
+        input#nombre(type='text' name='nombre' placeholder='Ej: Sucursal Centro' required)
+
+      .form-group
+        label(for='tipo') Tipo
+        select#tipo(name='tipo')
+          option(value='SUCURSAL') SUCURSAL
+          option(value='FRANQUICIA') FRANQUICIA
+
+      .form-group
+        label(for='direccion') Dirección de entrega
+        input#direccion(type='text' name='configuracion_logistica[direccion_entrega]' placeholder='Calle 123, Ciudad' required)
+
+      .form-group
+        label(for='zona') Zona de reparto
+        input#zona(type='text' name='configuracion_logistica[zona_reparto]' placeholder='Zona A')
+
+      .form-group
+        label(for='dias') Días de entrega (separados por coma)
+        input#dias(type='text' name='configuracion_logistica[dias_entrega]' placeholder='Lunes,Miércoles')
+
+      .form-group
+        label(for='royalty') Porcentaje royalty (solo franquicia)
+        input#royalty(type='number' step='0.01' name='finanzas[porcentaje_royalty]' placeholder='Ej: 5.5')
+
+      button.btn.btn-primary(type='submit')
+        span Crear cliente

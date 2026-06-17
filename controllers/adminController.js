@@ -56,6 +56,24 @@ export const formularioNuevo = (req, res) => {
     res.render('nuevo', { error: null });
 };
 
+// GET /admin/clientes/nuevo
+export const formularioNuevoCliente = (req, res) => {
+    res.render('cliente', { error: null });
+};
+
+// GET /admin/usuarios/nuevo
+export const formularioNuevoUsuario = async (req, res) => {
+    try {
+        // traer lista de clientes para asociar al usuario
+        const clientes = await Cliente.find({ activo: true }).select('_id nombre').lean();
+        const clienteId = req.query.clienteId || '';
+        res.render('usuario', { error: null, clientes, clienteId });
+    } catch (err) {
+        console.error(err);
+        res.render('usuario', { error: 'Error al cargar datos de clientes.', clientes: [], clienteId: '' });
+    }
+};
+
 // GET /admin/productos/:id/editar
 export const formularioEditar = async (req, res) => {
     try {

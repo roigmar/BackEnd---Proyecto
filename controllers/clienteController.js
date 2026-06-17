@@ -1,4 +1,16 @@
 import Cliente from '../models/cliente.js';
+import Usuario from '../models/usuario.js';
+import crypto from 'crypto';
+
+// Función para generar un nombre de usuario a partir del nombre del cliente
+function generarUsuario(nombre) {
+    return nombre
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '.')
+        .replace(/^\.+|\.+$/g, '');
+}
 
 // Crear un nuevo cliente (Punto de Venta)
 export const crearCliente = async (req, res) => {
@@ -17,7 +29,53 @@ export const crearCliente = async (req, res) => {
         });
 
         await nuevoCliente.save();
-        res.status(201).json(nuevoCliente);
+
+        // Generar usuario automáticamente
+        let usuarioGenerado = generarUsuario(nombre);
+
+        // Evitar duplicados
+        let contador = 1;
+        let usuarioDisponible = usuarioGenerado;
+
+        while (await Usuario.findOne({ usuario: usuarioDisponible })) {
+        usuarioDisponible = `${usuarioGenerado}.${contador}`;
+        contador++;
+        }
+
+        usuarioGenerado = usuarioDisponible;
+
+        // Generar contraseña temporal      
+        const passwordTemporal = crypto
+        .randomBytes(6)
+        .toString('base64')
+        .replace(/[+/=]/g, '');
+
+        // Crear usuario asociado
+        await Usuario.create({
+        usuario: usuarioGenerado,
+        password: passwordTemporal,
+        rol: 'CLIENTE',
+        clienteId: nuevoCliente._id,
+        debeCambiarPassword: true
+        });
+
+        const isHtmlForm =
+        req.is('application/x-www-form-urlencoded') ||
+        (req.headers.accept && req.headers.accept.includes('text/html'));
+
+        if (isHtmlForm) {
+        return res.render('cliente-creado', {
+        cliente: nuevoCliente,
+        usuario: usuarioGenerado,
+        passwordTemporal
+    });
+}
+
+res.status(201).json({
+    cliente: nuevoCliente,
+    usuario: usuarioGenerado,
+    passwordTemporal
+});
     } catch (error) {
         res.status(500).json({ mensaje: 'Error al crear el cliente', error: error.message });
     }

@@ -8,6 +8,7 @@ import pedidosRoutes from './routes/pedidoRoutes.js';
 import clienteRoutes from './routes/clienteRoutes.js';
 import portalRoutes from './routes/portalRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import usuarioRoutes from './routes/usuarioRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,6 +52,7 @@ app.use("/pedidos", pedidosRoutes);
 app.use("/clientes", clienteRoutes);
 app.use("/portal",   portalRoutes);
 app.use("/admin",    adminRoutes);
+app.use("/usuarios", usuarioRoutes);
 
 // Middleware global de manejo de errores
 app.use((err, req, res, next) => {

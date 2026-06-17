@@ -1,0 +1,32 @@
+extends layout-portal
+
+block nav-extra
+  a(href="/admin") ← Volver al panel
+  span.nav-badge Administrador
+
+block content
+  .card(style="max-width:650px;width:100%")
+    h2.section-title Cliente creado correctamente
+
+    .alert.alert-success
+      span ✓
+      span El cliente y su usuario fueron creados exitosamente.
+
+    .form-group
+      label Cliente
+      input(type="text" readonly value=cliente.nombre)
+
+    .form-group
+      label Usuario generado
+      input(type="text" readonly value=usuario)
+
+    .form-group
+      label Contraseña provisoria
+      input(type="text" readonly value=passwordTemporal)
+
+    p.small
+      strong Importante:
+      |  el usuario deberá cambiar esta contraseña al iniciar sesión por primera vez.
+
+    a.btn.btn-primary(href="/admin")
+      | Volver al panel

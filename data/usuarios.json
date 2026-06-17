@@ -58,4 +58,8 @@
     "rol": "CLIENTE",
     "clienteNombre": "Franquicia San Telmo"
   }
+    "usuario": "sucursal.tigre",
+    "passwordPlain": "tigre123",
+    "rol": "CLIENTE",
+    "clienteNombre": "Sucursal Tigre"
 ]
